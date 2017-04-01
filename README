@@ -15,9 +15,9 @@ folder, and in vim.org's script section:
 
    <http://www.vim.org/scripts/script.php?script_id=2626>
 
-The Git repository and bug tracker are hosted at Bitbucket:
+The Git repository and bug tracker are hosted at Gitlab:
 
-   <https://bitbucket.org/goeb/vimya/>
+   <https://gitlab.com/goeb/Vimya/>
 
 
 COPYRIGHT AND LICENCE

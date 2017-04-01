@@ -20,7 +20,7 @@
 
 1. Overview                                            *vimya-overview*
 
-   Vimya is plugin for the Vim editor that may be used to execute the
+   Vimya is a plugin for the Vim editor that may be used to execute the
    contents of a Vim buffer, the current |visual-mode| selection, or a
    single command in Autodesk Maya.
 
@@ -81,7 +81,7 @@
    With 'Pathogen' installed, you just need to clone the Vimya Git
    repository to the bundle directory in your runtime path:
 >
-     git clone https://bitbucket.org/goeb/vimya.git ~/.vim/bundle/vimya
+     git clone https://gitlab.com/goeb/Vimya.git ~/.vim/bundle/vimya
 <
    This also allows you to update Vimya by pulling the latest version
    with Git.
@@ -493,9 +493,9 @@
 >
      http://www.vim.org/scripts/script.php?script_id=2626
 <
-   The Git repository is hosted at Bitbucket:
+   The Git repository is hosted at Gitlab:
 >
-     https://bitbucket.org/goeb/vimya/
+     https://gitlab.com/goeb/Vimya/
 <
    Feel free to contact the author for any questions, suggestions etc.
    regarding this plugin by mail:

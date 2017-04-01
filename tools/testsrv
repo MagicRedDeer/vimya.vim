@@ -5,7 +5,7 @@
 #
 # WARNING: Do not use this script unless you know what you're doing!
 #
-# The following MEL commands will be handled (only if useed exactly as shown!):
+# The following MEL commands will be handled (only if used exactly as shown!):
 #
 #  cmdFileOutput -o "<file>";    - set the current output file
 #  sysFile -delete "<file>";     - delete the file
