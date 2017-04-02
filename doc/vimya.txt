@@ -81,7 +81,7 @@
    With 'Pathogen' installed, you just need to clone the Vimya Git
    repository to the bundle directory in your runtime path:
 >
-     git clone https://gitlab.com/goeb/Vimya.git ~/.vim/bundle/vimya
+     git clone https://gitlab.com/goeb/vimya.git ~/.vim/bundle/vimya
 <
    This also allows you to update Vimya by pulling the latest version
    with Git.
@@ -495,7 +495,7 @@
 <
    The Git repository is hosted at Gitlab:
 >
-     https://gitlab.com/goeb/Vimya/
+     https://gitlab.com/goeb/vimya/
 <
    Feel free to contact the author for any questions, suggestions etc.
    regarding this plugin by mail:
