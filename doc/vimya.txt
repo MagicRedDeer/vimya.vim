@@ -243,6 +243,7 @@
      |vimyaOpenLog()|                                 |vimyaOpenLog|
      |vimyaRefreshLog()|                              |vimyaRefreshLog|
      |vimyaResetLog()|                                |vimyaResetLog|
+     |vimyaWhatIs()|                                  |vimyaWhatIs|
 
    *sendBufferToMaya* (...)                        *sendBufferToMaya()*
 
@@ -383,6 +384,16 @@
      not available), no new log file will be created (if a log file is
      set, it will still be closed, though).
 
+   *vimyaWhatIs* (keyword = None)                    *vimyaWhatIs()*
+
+     This function will take the given argument or in its absence the current
+     word under cursor and pass it to Maya's `whatIs` procedure. It will take
+     the path provided in the response found in the log file and open a buffer
+     using it.
+
+     If the buffer open in any window it will switch to the relevant window
+     else will open (if required) and switch in the current window
+
    Note that help for all these functions can also be accessed the
    Python way by running:
 >
@@ -430,6 +441,7 @@
      :VimyaBuffer                                       |:VimyaBuffer|
      :VimyaCommand                                      |:VimyaCommand|
      :VimyaSend                                         |:VimyaSend|
+     :VimyaWhatIs                                       |:VimyaWhatIs|
 
    *:VimyaRun*
 
@@ -461,6 +473,15 @@
 <
      and this will eventually print the string "ab" in Maya's script
      output. Also see |vimyaRun()| for more details.
+
+   *:VimyaWhatIs* <keyword>
+
+     Executes VimyaCommand with appropriate parameters to use maya's whatIs
+     functionality to open the path of the current 'word' under the cursor if
+     it exists as a global procedure within maya's script path.  global
+     procedures whose name is under the cursor. If a keyword is provided as an
+     argument then that argument is used instead of the current word.
+
 
    *:VimyaSend* <parameters>
 
@@ -507,6 +528,8 @@
 
 10. Changelog                                         *vimya-changelog*
 
+   2018/05/09   * added Public Function vimyaWhatIs()
+                * added Ex Command :VimyaWhatIs:
    2014/05/22   * rewrite of most of the plugin's code and most of the
                   documentation
                 * added options g:vimyaSocket, g:vimyaTimeout,
