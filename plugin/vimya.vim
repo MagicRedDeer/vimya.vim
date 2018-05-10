@@ -29,16 +29,16 @@
 "
 """
 
-" if exists ('g:vimyaLoaded') || &compatible || ! has ('python')
-"   finish
-" endif
+if exists ('g:vimyaLoaded') || &compatible || ! has ('python')
+    finish
+endif
 let g:vimyaLoaded = '0.5'
 
 """
 " Configuration variables:
 """
 
-function! VimyaSetConfig (name, default)
+function VimyaSetConfig (name, default)
     if ! exists ('g:vimya' . a:name)
         let {'g:vimya' . a:name} = a:default
     endif
@@ -71,11 +71,11 @@ endif
 " Commands:
 """
 
-command! -nargs=0 VimyaRun     :py vimyaRun    ()
-command! -nargs=0 VimyaBuffer  :py vimyaRun    (forceBuffer = True    )
-command! -nargs=1 VimyaCommand :py vimyaRun    (userCmd     = <q-args>)
-command! -nargs=1 VimyaSend    :py vimyaSend   ([<q-args>]            )
-command! -nargs=? VimyaWhatIs  :py vimyaWhatIs (<q-args>              )
+command -nargs=0 VimyaRun     :py vimyaRun    ()
+command -nargs=0 VimyaBuffer  :py vimyaRun    (forceBuffer = True    )
+command -nargs=1 VimyaCommand :py vimyaRun    (userCmd     = <q-args>)
+command -nargs=1 VimyaSend    :py vimyaSend   ([<q-args>]            )
+command -nargs=? VimyaWhatIs  :py vimyaWhatIs (<q-args>              )
 
 """
 " Main stuff (most of it is Python):
@@ -319,7 +319,7 @@ def vimyaWhatIs(keyword=None):
         __vimyaError("No valid keyword found");
         return
 
-    # return whatIs info with tag to avoid confusion with any previous lines
+    # output whatIs info with tag to avoid confusion with any previous lines
     cmds = ['string $vimya_kw="%s";' % keyword,
             'string $vimya_res=`whatIs $vimya_kw`;',
             'print `format -s $vimya_kw -s $vimya_res "\\n^1s:^2s"`;']
