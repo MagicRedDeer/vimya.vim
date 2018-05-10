@@ -225,6 +225,8 @@ def __vimyaFixPath (filename):
         return filename
 
 def __vimyaFindBuffer(path):
+    """Find the buffer and tab that contains the given path
+    """
 
     if path != '':
         bufferIndex  = int (vim.eval ('bufnr     ("%s")' % __vimyaEscape (path, '\\"')))
@@ -258,7 +260,7 @@ def __vimyaFindLog ():
     global __vimyaLogPath
     return __vimyaFindBuffer(__vimyaLogPath)
 
-def __vimyaGetLastLine(path):
+def __vimyaGetLastLine(path, force_read=False):
 
     if __vimyaLogPath == "":
         __vimyaError("Log file not found");
@@ -268,7 +270,7 @@ def __vimyaGetLastLine(path):
     last_line = ''
 
 
-    if bufferIndex == -1:
+    if force_read or bufferIndex == -1:
         # reading last line
         if os.path.isfile(__vimyaLogPath):
             size = os.path.getsize(__vimyaLogPath)
@@ -289,20 +291,8 @@ def __vimyaGetLastLine(path):
 
     return last_line
 
-def __vimyaSwitchTo(path):
-
-    if path and os.path.isfile(path):
-        bufferIndex  = int (vim.eval ('bufnr     ("%s")' % __vimyaEscape (__vimyaLogPath, '\\"')))
-        bufferExists = int (vim.eval ('bufexists ( %d )' % int           (bufferIndex          )))
-        if bufferExists:
-            tabNum = int (vim.eval ('tabpagenr ("$")'))
-            for tabIndex in range (1, tabNum + 1):
-                tabBuffers = vim.eval ('tabpagebuflist (%d)' % tabIndex)
-                if str (bufferIndex) in tabBuffers:
-                    return (tabIndex, bufferIndex)
-        return (0, bufferIndex)
-
 def vimyaWhatIs(keyword=None):
+
     """ Open or Switch to the buffer containing procedure with the name of the provided keyword
 
     vimyaWhatIs () : None
@@ -313,13 +303,17 @@ def vimyaWhatIs(keyword=None):
 
     If the buffer open in any window it will switch to the relevant window else will open (if
     required) and switch in the current window
+
+    If any Info is provided by the whatIs command it is Echoed.
     """
 
     if not keyword:
         keyword = vim.eval('expand("<cword>")')
-    # re.sub(r'[(;+-)\"\.]', "", keyword)
+        keyWORD = vim.eval('expand("<cWORD>")')
+        if '$'+keyword in keyWORD:
+            keyword = '$' + keyword
 
-    if not re.match("[A-Za-z_](0-9A-Za-z_)*", keyword):
+    if not keyword or not re.match("\$?[A-Za-z_](0-9A-Za-z_)*", keyword):
         __vimyaError("No valid keyword found");
         return
 
@@ -327,24 +321,31 @@ def vimyaWhatIs(keyword=None):
             'string $vimya_res=`whatIs $vimya_kw`;',
             'print `format -s $vimya_kw -s $vimya_res "\\n^1s:^2s"`;']
 
-    vimyaRun(userCmd=''.join(cmds))
+    success = vimyaRun(userCmd=''.join(cmds))
 
-    response = __vimyaGetLastLine(__vimyaLogPath)
+    response = __vimyaGetLastLine(
+            __vimyaLogPath, not success or bool(vim.eval('g:vimyaForceRefresh')))
 
-    pattern = '(%s):Mel procedure found in: (.*)' % keyword
-    mel_path = ''
-    match = re.match(pattern, response)
+    info = ''
+    info_pattern = '%s:(.*)' % keyword
+    match = re.match(info_pattern, response)
     if match:
-        proc_name, mel_path = match.groups()
+        info = match.group(1)
 
-    if not mel_path:
-        return
+    mel_path = ''
+    found_pattern = '%s:Mel procedure found in: (.*)' % keyword
+    match = re.match(found_pattern, response)
+    if match:
+        mel_path = match.group(1)
+
+    if info:
+        vim.command('echom "%s:%s"' % (keyword, info.replace('"', '\\"' )))
 
     if mel_path:
         tabIndex, bufferIndex = __vimyaFindBuffer(mel_path)
 
         if not tabIndex:
-            if not bufferIndex:
+            if bufferIndex < 1:
                 vim.command ('e %s' % mel_path)
             else:
                 vim.command ('b %d' % bufferIndex)
@@ -354,8 +355,8 @@ def vimyaWhatIs(keyword=None):
             vim.command('wincmd t')
             vim.command('%dwincmd w' % winIndex)
 
-        vim.command('normal gg')
-        vim.command('/proc.*%s' % keyword)
+        vim.eval('search("\\\\Cproc.*%s", "w")' % keyword)
+        vim.command('normal! zz')
 
 def vimyaRefreshLog ():
 
