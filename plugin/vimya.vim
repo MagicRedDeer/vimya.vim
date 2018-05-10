@@ -75,7 +75,7 @@ command! -nargs=0 VimyaRun     :py vimyaRun    ()
 command! -nargs=0 VimyaBuffer  :py vimyaRun    (forceBuffer = True    )
 command! -nargs=1 VimyaCommand :py vimyaRun    (userCmd     = <q-args>)
 command! -nargs=1 VimyaSend    :py vimyaSend   ([<q-args>]            )
-command! -nargs=? VimyaWhatIs  :py vimyaWhatIs ([<q-args>]            )
+command! -nargs=? VimyaWhatIs  :py vimyaWhatIs (<q-args>              )
 
 """
 " Main stuff (most of it is Python):
@@ -304,8 +304,10 @@ def vimyaWhatIs(keyword=None):
     If the buffer open in any window it will switch to the relevant window else will open (if
     required) and switch in the current window
 
-    If any Info is provided by the whatIs command it is Echoed.
+    If any Info is provided by the whatIs command it is `echom`ed.
     """
+
+    __vimyaError(keyword)
 
     if not keyword:
         keyword = vim.eval('expand("<cword>")')
@@ -317,6 +319,7 @@ def vimyaWhatIs(keyword=None):
         __vimyaError("No valid keyword found");
         return
 
+    # return whatIs info with tag to avoid confusion with any previous lines
     cmds = ['string $vimya_kw="%s";' % keyword,
             'string $vimya_res=`whatIs $vimya_kw`;',
             'print `format -s $vimya_kw -s $vimya_res "\\n^1s:^2s"`;']
