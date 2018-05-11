@@ -324,7 +324,10 @@ def vimyaWhatIs(keyword=None):
             'string $vimya_res=`whatIs $vimya_kw`;',
             'print `format -s $vimya_kw -s $vimya_res "\\n^1s:^2s"`;']
 
+    ft = vim.eval('&ft')
+    vim.command('setl ft=mel')
     success = vimyaRun(userCmd=''.join(cmds))
+    vim.command('setl ft=%s' % ft)
 
     response = __vimyaGetLastLine(
             __vimyaLogPath, not success or bool(vim.eval('g:vimyaForceRefresh')))
@@ -358,7 +361,8 @@ def vimyaWhatIs(keyword=None):
             vim.command('wincmd t')
             vim.command('%dwincmd w' % winIndex)
 
-        vim.eval('search("\\\\Cproc.*%s", "w")' % keyword)
+        vim.eval('search("\\\\Cproc.*%s\\\\s*\\\\((\\\\|$\\\\)", "w")' % keyword)
+
         vim.command('normal! zz')
 
 def vimyaRefreshLog ():
@@ -577,7 +581,7 @@ def vimyaRun (forceBuffer = False, userCmd = None):
 
     global __vimyaLogPath, __vimyaTempFiles
 
-    filetype = vim.eval ('&g:filetype')
+    filetype = vim.eval ('&filetype')
     if filetype not in ['', 'mel', 'python']:
         return __vimyaError ('Error: Supported filetypes: "python", "mel", None.')
 
