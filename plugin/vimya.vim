@@ -613,7 +613,7 @@ def vimyaRun (forceBuffer = False, userCmd = None):
     finally:
         os.close (tmpHandle)
 
-    commands = ['commandEcho -state on -lineNumbers on;']
+    commands = []
 
     defaultType = vim.eval ('g:vimyaDefaultFiletype')
     escapedPath = __vimyaEscape (__vimyaFixPath (tmpPath), '\\"')
@@ -623,7 +623,6 @@ def vimyaRun (forceBuffer = False, userCmd = None):
     elif filetype == 'mel' or (filetype == '' and defaultType == 'mel'):
         commands.append ('source "%s";' % escapedPath)
 
-    commands.append ('commandEcho -state off -lineNumbers off;')
     commands.append ('sysFile -delete "%s";' % escapedPath)
 
     sent = vimyaSend (commands)
