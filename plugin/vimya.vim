@@ -29,7 +29,7 @@
 "
 """
 
-if exists ('g:vimyaLoaded') || &compatible || ! has ('python')
+if exists ('g:vimyaLoaded') || &compatible || ! has ('python3')
     finish
 endif
 let g:vimyaLoaded = '0.5'
