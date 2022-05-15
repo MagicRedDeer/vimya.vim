@@ -539,7 +539,7 @@ def vimyaSend (commands):
     try:
         try:
             for command in commands:
-                connection.send ('%s\n' % command)
+                connection.send (('%s\n' % command).encode())
                 sent = sent + 1
         except socket.error as e:
             __vimyaError ('Sending a command failed: %s' % str (e))
@@ -600,16 +600,16 @@ def vimyaRun (forceBuffer = False, userCmd = None):
 
     try:
         if userCmd:
-            os.write (tmpHandle, '%s\n' % userCmd)
+            os.write (tmpHandle, ('%s\n' % userCmd).encode())
         else:
             vStart = vim.current.buffer.mark ('<')
             if (vStart is None) or (forceBuffer):
                 for line in vim.current.buffer:
-                    os.write (tmpHandle, '%s\n' % line)
+                    os.write (tmpHandle, ('%s\n' % line).encode())
             else:
                 vEnd = vim.current.buffer.mark ('>')
                 for line in vim.current.buffer [vStart [0] - 1 : vEnd [0]]:
-                    os.write (tmpHandle, '%s\n' % line)
+                    os.write (tmpHandle, ('%s\n' % line).encode())
     finally:
         os.close (tmpHandle)
 
