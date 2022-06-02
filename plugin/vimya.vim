@@ -315,7 +315,7 @@ def vimyaWhatIs(keyword=None):
         if '$'+keyword in keyWORD:
             keyword = '$' + keyword
 
-    if not keyword or not re.match("\$?[A-Za-z_](0-9A-Za-z_)*", keyword):
+    if not keyword or not re.match(r"\$?[A-Za-z_](0-9A-Za-z_)*", keyword):
         __vimyaError("No valid keyword found");
         return
 
@@ -334,15 +334,15 @@ def vimyaWhatIs(keyword=None):
 
     info = ''
     info_pattern = '%s:(.*)' % keyword
-    match = re.match(info_pattern, response)
+    match = re.match(info_pattern.encode(), response)
     if match:
-        info = match.group(1)
+        info = match.group(1).decode()
 
     mel_path = ''
     found_pattern = '%s:Mel procedure found in: (.*)' % keyword
-    match = re.match(found_pattern, response)
+    match = re.match(found_pattern.encode(), response)
     if match:
-        mel_path = match.group(1)
+        mel_path = match.group(1).decode()
 
     if info:
         vim.command('echom "%s:%s"' % (keyword, info.replace('"', '\\"' )))
