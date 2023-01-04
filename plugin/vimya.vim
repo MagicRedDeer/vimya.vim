@@ -619,7 +619,7 @@ def vimyaRun (forceBuffer = False, userCmd = None):
     escapedPath = __vimyaEscape (__vimyaFixPath (tmpPath), '\\"')
 
     if filetype == 'python' or (filetype == '' and defaultType == 'python'):
-        commands.append ('python ("execfile (\\"%s\\")");' % escapedPath)
+        commands.append ('python ("import runpy;runpy.run_path (\\"%s\\")");' % escapedPath)
     elif filetype == 'mel' or (filetype == '' and defaultType == 'mel'):
         commands.append ('source "%s";' % escapedPath)
 
